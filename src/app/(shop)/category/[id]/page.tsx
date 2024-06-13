@@ -1,6 +1,7 @@
 import { ProductGrid, Title } from '@/components'
 import { Category } from '@/interfaces'
 import { initialData } from '@/seed/seed'
+import { notFound } from 'next/navigation'
 
 type Props = {
   params: {
@@ -19,9 +20,9 @@ export default function CategoryPage({ params }: Props) {
     unisex: 'unisex',
   }
 
-  // if (id === 'kids') {
-  //   notFound()
-  // }
+  if (!(id in labels)) {
+    notFound()
+  }
 
   return (
     <>
