@@ -1,4 +1,4 @@
-import { SizeSelector } from '@/components'
+import { QuantitySelector, SizeSelector, SlideShow } from '@/components'
 import { titleFont } from '@/config/fonts'
 import { initialData } from '@/seed/seed'
 import { notFound } from 'next/navigation'
@@ -16,12 +16,14 @@ export default function ProductPage({ params }: Props) {
     notFound()
   }
 
-  const { title, price, description, sizes } = product
+  const { title, price, description, sizes, images } = product
 
   return (
     <div className='mt-5 mb-20 grid md:grid-cols-3 gap-3'>
       {/* slideshow */}
-      <div className='md:col-span-2'></div>
+      <div className='md:col-span-2'>
+        <SlideShow images={images} />
+      </div>
 
       {/* detalles */}
       <div className='px-5'>
@@ -31,6 +33,7 @@ export default function ProductPage({ params }: Props) {
         {/* selector de tallas */}
         <SizeSelector availableSize={sizes} selectedSize={sizes[0]} />
         {/* selector de cantidad */}
+        <QuantitySelector quantity={1} />
 
         <button className='btn-primary my-5'>Agregar al carrito</button>
 
