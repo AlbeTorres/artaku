@@ -1,15 +1,15 @@
 'use client'
+import clsx from 'clsx'
 import Image from 'next/image'
 import { useState } from 'react'
-import { ImArrowRight } from 'react-icons/im'
-import { IoMdArrowDropleft } from 'react-icons/io'
-import { RxDotFilled } from 'react-icons/rx'
+import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io'
 
 interface Props {
   images: string[]
+  className?: string
 }
 
-export const SlideShow = ({ images }: Props) => {
+export const SlideShow = ({ images, className }: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const prevSlide = () => {
@@ -29,33 +29,40 @@ export const SlideShow = ({ images }: Props) => {
   }
 
   return (
-    <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
-      <Image
+    <div className={clsx('w-full h-full m-auto py-16 px-4 relative group', `${className}`)}>
+      {/* <Image
         alt='product image'
         src={`/products/${images[currentIndex]}`}
         width={500}
         height={500}
-      />
-      {/* <div
-        style={{ backgroundImage: `url(${images[currentIndex]})` }}
-        className='w-full h-full rounded-2xl bg-center bg-cover duration-500'
-      ></div> */}
+        className='w-full h-full rounded-2xl object-cover select-none'
+      /> */}
+      <div
+        style={{ backgroundImage: `url(/products/${images[currentIndex]})` }}
+        className='w-full h-full rounded-md bg-center bg-cover duration-500'
+      ></div>
       {/* Left Arrow */}
       <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
         <IoMdArrowDropleft onClick={prevSlide} size={30} />
       </div>
       {/* Right Arrow */}
       <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-        <ImArrowRight onClick={nextSlide} size={30} />
+        <IoMdArrowDropright onClick={nextSlide} size={30} />
       </div>
-      <div className='flex top-4 justify-center py-2'>
+      <div className='flex top-4 py-2 gap-2'>
         {images.map((slide, slideIndex) => (
           <div
             key={slideIndex}
             onClick={() => goToSlide(slideIndex)}
             className='text-2xl cursor-pointer'
           >
-            <RxDotFilled />
+            <Image
+              alt='product image'
+              src={`/products/${slide}`}
+              width={150}
+              height={150}
+              className='w-full'
+            />
           </div>
         ))}
       </div>

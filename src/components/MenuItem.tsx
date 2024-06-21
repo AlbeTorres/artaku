@@ -8,12 +8,9 @@ interface Props {
 
 export const MenuItem = ({ icon: Icon, title, href }: Props) => {
   return (
-    <Link
-      href={href}
-      className='flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all'
-    >
-      <Icon size={30} />
-      <span className='ml-3 text-xl'>{title}</span>
+    <Link href={href} className='flex items-center p-2 hover:bg-gray-100 rounded transition-all'>
+      <Icon size={25} />
+      <span className='ml-3 text-md'>{title}</span>
     </Link>
   )
 }
