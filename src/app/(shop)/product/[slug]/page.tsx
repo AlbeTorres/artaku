@@ -19,10 +19,10 @@ export default function ProductPage({ params }: Props) {
   const { title, price, description, sizes, images } = product
 
   return (
-    <div className='mt-5 mb-20 grid md:grid-cols-3  gap-3'>
+    <div className='mt-5 mb-20 grid md:grid-cols-3'>
       {/* slideshow */}
       <div className='md:col-span-2'>
-        <SlideShow className={'!h-[800px]'} images={images} />
+        <SlideShow className='!h-[600px]' images={images} />
       </div>
 
       {/* detalles */}

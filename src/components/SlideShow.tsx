@@ -1,8 +1,8 @@
 'use client'
 import clsx from 'clsx'
-import Image from 'next/image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io'
+import { RxDotFilled } from 'react-icons/rx'
 
 interface Props {
   images: string[]
@@ -11,6 +11,8 @@ interface Props {
 
 export const SlideShow = ({ images, className }: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0
@@ -28,40 +30,61 @@ export const SlideShow = ({ images, className }: Props) => {
     setCurrentIndex(slideIndex)
   }
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current - touchEndX.current > 50) {
+      nextSlide()
+    }
+
+    if (touchStartX.current - touchEndX.current < -50) {
+      prevSlide()
+    }
+  }
+
   return (
-    <div className={clsx('w-full h-full m-auto py-16 px-4 relative group', `${className}`)}>
-      {/* <Image
-        alt='product image'
-        src={`/products/${images[currentIndex]}`}
-        width={500}
-        height={500}
-        className='w-full h-full rounded-2xl object-cover select-none'
-      /> */}
+    <div className={clsx('w-full max-w-[726px] mx-auto py-16 md:px-4 ')}>
       <div
-        style={{ backgroundImage: `url(/products/${images[currentIndex]})` }}
-        className='w-full h-full rounded-md bg-center bg-cover duration-500'
-      ></div>
-      {/* Left Arrow */}
-      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-        <IoMdArrowDropleft onClick={prevSlide} size={30} />
+        className='relative group'
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          style={{ backgroundImage: `url(/products/${images[currentIndex]})` }}
+          className={clsx(
+            'w-full h-full rounded-md bg-center bg-cover duration-500',
+            `${className}`
+          )}
+        ></div>
+        {/* Left Arrow */}
+        <div className='hidden md:group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
+          <IoMdArrowDropleft onClick={prevSlide} size={30} />
+        </div>
+        {/* Right Arrow */}
+        <div className='hidden md:group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
+          <IoMdArrowDropright onClick={nextSlide} size={30} />
+        </div>
       </div>
-      {/* Right Arrow */}
-      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-        <IoMdArrowDropright onClick={nextSlide} size={30} />
-      </div>
-      <div className='flex top-4 py-2 gap-2'>
+      <div className='flex justify-center md:justify-start py-2 gap-2'>
         {images.map((slide, slideIndex) => (
-          <div
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className='text-2xl cursor-pointer'
-          >
-            <Image
+          <div key={slideIndex} onClick={() => goToSlide(slideIndex)} className=' cursor-pointer'>
+            <img
               alt='product image'
               src={`/products/${slide}`}
-              width={150}
-              height={150}
-              className='w-full'
+              className='hidden md:block rounded-md w-40 h-40 hover:scale-105 transition-all duration-500 '
+            />
+
+            <RxDotFilled
+              className={clsx('text-3xl md:hidden', {
+                'text-purple-700': currentIndex === slideIndex,
+              })}
             />
           </div>
         ))}
