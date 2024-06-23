@@ -49,7 +49,7 @@ export const SlideShow = ({ images, className }: Props) => {
   }
 
   return (
-    <div className={clsx('w-full max-w-[726px] mx-auto py-16 md:px-4 ')}>
+    <div className={clsx('w-full relative max-w-[726px] mx-auto md:py-16 md:px-4 ')}>
       <div
         className='relative group'
         onTouchStart={handleTouchStart}
@@ -72,17 +72,17 @@ export const SlideShow = ({ images, className }: Props) => {
           <IoMdArrowDropright onClick={nextSlide} size={30} />
         </div>
       </div>
-      <div className='flex justify-center md:justify-start py-2 gap-2'>
+      <div className='flex justify-center w-full md:justify-start py-2 gap-2 absolute bottom-2 md:static'>
         {images.map((slide, slideIndex) => (
           <div key={slideIndex} onClick={() => goToSlide(slideIndex)} className=' cursor-pointer'>
-            <img
+            <img // eslint-disable-line @next/next/no-img-element
               alt='product image'
               src={`/products/${slide}`}
               className='hidden md:block rounded-md w-40 h-40 hover:scale-105 transition-all duration-500 '
             />
 
             <RxDotFilled
-              className={clsx('text-3xl md:hidden', {
+              className={clsx('text-3xl md:hidden ', {
                 'text-purple-700': currentIndex === slideIndex,
               })}
             />

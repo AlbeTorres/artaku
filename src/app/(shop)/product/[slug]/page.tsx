@@ -22,11 +22,11 @@ export default function ProductPage({ params }: Props) {
     <div className='mt-5 mb-20 grid md:grid-cols-3'>
       {/* slideshow */}
       <div className='md:col-span-2'>
-        <SlideShow className='!h-[600px]' images={images} />
+        <SlideShow className='!h-[500px] md:!h-[600px]' images={images} />
       </div>
 
       {/* detalles */}
-      <div className='px-5'>
+      <div className='px-5 pt-8 md:pt-0'>
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>{title}</h1>
         <p className='text-lg mb-5'>{price}</p>
 
