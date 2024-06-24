@@ -2,10 +2,15 @@ import { QuantitySelector, Title } from '@/components'
 import { initialData } from '@/seed/seed'
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 const productCart = [initialData.products[0], initialData.products[2], initialData.products[3]]
 
 export default function CartPage() {
+  if (productCart.length === 0) {
+    redirect('/empty')
+  }
+
   const subtotal = productCart.reduce((s, p) => s + p.price, 0)
   const impuesto = 0.15
 
@@ -41,7 +46,7 @@ export default function CartPage() {
           </div>
 
           <div className='bg-white rounded-md h-fit shadow-xl p-7 order-2'>
-            <h2 className='text-2xl mb-2'>Resumen de órdenes</h2>
+            <h2 className='text-2xl mb-2'>Resumen de orden</h2>
             <div className='grid grid-cols-2 gap-y-1'>
               <span>{'No. productos'}</span>
               <span className='text-right'>{`${productCart.length} articulos`}</span>

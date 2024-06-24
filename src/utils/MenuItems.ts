@@ -21,7 +21,7 @@ export const options = [
   {
     icon: IoLogInOutline,
     title: 'Ingresar',
-    href: '/',
+    href: '/auth/login',
   },
   {
     icon: IoLogOutOutline,

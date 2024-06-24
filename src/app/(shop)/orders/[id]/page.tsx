@@ -1,8 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Title } from '@/components'
 import { initialData } from '@/seed/seed'
+import clsx from 'clsx'
 import Image from 'next/image'
-import Link from 'next/link'
+import { IoCardOutline } from 'react-icons/io5'
+
+interface Props {
+  params: {
+    id: string
+  }
+}
 
 const orden = {
   nombre: 'Alberto',
@@ -16,9 +23,14 @@ const orden = {
   },
   movil: '7896664532',
   productos: [initialData.products[0], initialData.products[2], initialData.products[3]],
+  payed: true,
 }
 
-export default function CheckoutPage() {
+export default function OrderPage({ params }: Props) {
+  const { id } = params
+  //Todo: verificar
+  //redirect
+
   const subtotal = orden.productos.reduce((s, p) => s + p.price, 0)
   const impuesto = 0.15
   const cant = 3
@@ -26,14 +38,10 @@ export default function CheckoutPage() {
   return (
     <div className='flex justify-center items-center mb-72 md:px-10'>
       <div className='flex flex-col w-[1000px]'>
-        <Title title='Verificar orden' />
+        <Title title={`Orden #${id}`} />
         <div className='grid sm:grid-cols-2 gap-10'>
           {/* carrito */}
           <div className='flex flex-col mt-5 gap-y-2 order-last md:order-1'>
-            <span className='text-xl'>Lista de productos</span>
-            <Link href={'/'} className='underline mb-5'>
-              Editar pedido
-            </Link>
             {/* items */}
             {orden.productos.map(product => (
               <div key={product.slug} className='flex'>
@@ -85,19 +93,16 @@ export default function CheckoutPage() {
               )}`}</span>
             </div>
             <div className='mt-4'>
-              <p className='mb-4 text-xs'>
-                Al hacer click en "Pagar", aceptas nuestros{' '}
-                <Link href={'/'} className='underline'>
-                  Terminos y condiciones de uso
-                </Link>{' '}
-                y nuestra{' '}
-                <Link className='underline' href={'/'}>
-                  Politica de privacidad
-                </Link>
-              </p>
-              <Link className='flex justify-center btn-primary' href={'/orders/123'}>
-                Pagar
-              </Link>
+              <div
+                className={clsx(
+                  'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
+
+                  orden.payed ? 'bg-green-500' : 'bg-red-500'
+                )}
+              >
+                <IoCardOutline size={30} />
+                <span className='mx-2'>{orden.payed ? 'Pagada' : 'Pendiente de pago'}</span>
+              </div>
             </div>
           </div>
         </div>
