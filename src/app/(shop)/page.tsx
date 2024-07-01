@@ -1,9 +1,9 @@
+import { getPaginateProductWithImage } from '@/actions'
 import { ProductGrid, Title } from '@/components'
-import { initialData } from '@/seed/seed'
 
-const products = initialData.products
+export default async function Home() {
+  const { products } = await getPaginateProductWithImage()
 
-export default function Home() {
   return (
     <>
       <Title title='Tienda' subtitle='Todos los productos' />
