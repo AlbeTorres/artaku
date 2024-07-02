@@ -22,6 +22,7 @@ export const ProductItem = ({ product }: Props) => {
           height={500}
           onMouseEnter={() => setDisplayImage(product.images[1])}
           onMouseLeave={() => setDisplayImage(product.images[0])}
+          priority={false}
         />
       </Link>
       <div className='p-4 flex flex-col'>

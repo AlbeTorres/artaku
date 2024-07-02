@@ -1,4 +1,5 @@
 export const revalidate = 300
+
 import { getPaginateProductWithImage } from '@/actions'
 import { Pagination, ProductGrid, Title } from '@/components'
 import { Category } from '@/interfaces'
