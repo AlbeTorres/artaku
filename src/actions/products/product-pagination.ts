@@ -1,11 +1,13 @@
 import prisma from '@/lib/prisma'
+import { Gender } from '@prisma/client'
 
 interface Props {
   take?: number
   page?: number
+  category?: Gender
 }
 
-export const getPaginateProductWithImage = async ({ take = 12, page = 1 }: Props) => {
+export const getPaginateProductWithImage = async ({ take = 12, page = 1, category }: Props) => {
   if (isNaN(Number(page))) page = 1
   if (page < 1) page = 1
 
@@ -21,18 +23,28 @@ export const getPaginateProductWithImage = async ({ take = 12, page = 1 }: Props
           },
         },
       },
+      where: {
+        gender: category,
+      },
     })
 
-  const fetchTotalCount = () => prisma.product.count({})
+  const fetchTotalCount = () =>
+    prisma.product.count({
+      where: {
+        gender: {
+          equals: category,
+        },
+      },
+    })
 
   try {
     const [products, totalCount] = await Promise.all([fetchProducts(), fetchTotalCount()])
 
-    const totalPage = Math.ceil(totalCount / take)
+    const totalPages = Math.ceil(totalCount / take)
 
     return {
       currentPage: page,
-      totalPage: totalPage,
+      totalPages: totalPages,
       products: products.map(p => ({
         ...p,
         images: p.ProductImages.map(i => i.url),

@@ -1,17 +1,30 @@
-import { ProductGrid, Title } from '@/components'
+export const revalidate = 300
+import { getPaginateProductWithImage } from '@/actions'
+import { Pagination, ProductGrid, Title } from '@/components'
 import { Category } from '@/interfaces'
-import { initialData } from '@/seed/seed'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 type Props = {
   params: {
     id: Category
   }
+  searchParams: {
+    page?: string
+  }
 }
 
-export default function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
   const { id } = params
-  const products = initialData.products.filter(p => p.gender === id)
+  const page = searchParams.page ? parseInt(searchParams.page) : 1
+
+  const { products, totalPages } = await getPaginateProductWithImage({
+    page,
+    category: id,
+  })
+
+  if (products.length === 0) {
+    redirect(`/category/${id}`)
+  }
 
   const labels = {
     men: 'hombres',
@@ -28,6 +41,7 @@ export default function CategoryPage({ params }: Props) {
     <>
       <Title title={`Articulos de ${labels[id]}`} />
       <ProductGrid products={products} />
+      <Pagination totalPages={totalPages} />
     </>
   )
 }
