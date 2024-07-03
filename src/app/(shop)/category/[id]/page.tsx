@@ -3,6 +3,7 @@ export const revalidate = 300
 import { getPaginateProductWithImage } from '@/actions'
 import { Pagination, ProductGrid, Title } from '@/components'
 import { Category } from '@/interfaces'
+import { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 
 type Props = {
@@ -11,6 +12,37 @@ type Props = {
   }
   searchParams: {
     page?: string
+  }
+}
+
+const labels = {
+  men: 'hombres',
+  women: 'mujeres',
+  kid: 'niños',
+  unisex: 'unisex',
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  //read route params
+  const id = params.id
+
+  //fetch data
+  // const product = await getProductbySlug(slug)
+
+  //optionally access and extend (rater than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: `Productos otakus para ${labels[id]}`,
+    description: `Mejores precios en productos otakus para ${labels[id]}`,
+    openGraph: {
+      title: `Productos otakus para ${labels[id]}`,
+      description: `Mejores precios en productos otakus para ${labels[id]}`,
+      images: [`/img/zombi-sama.png`],
+    },
   }
 }
 
@@ -25,13 +57,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   if (products.length === 0) {
     redirect(`/category/${id}`)
-  }
-
-  const labels = {
-    men: 'hombres',
-    women: 'mujeres',
-    kid: 'niños',
-    unisex: 'unisex',
   }
 
   if (!(id in labels)) {
