@@ -1,6 +1,7 @@
-import { QuantitySelector, Title } from '@/components'
+import { ProductsInCart, Title } from '@/components'
+
 import { initialData } from '@/seed/seed'
-import Image from 'next/image'
+
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
@@ -15,35 +16,12 @@ export default function CartPage() {
   const impuesto = 0.15
 
   return (
-    <div className='flex justify-center items-center mb-72 md:px-10'>
+    <div className='flex justify-center items-center mb-72 '>
       <div className='flex flex-col w-[1000px]'>
         <Title title='Carrito' />
         <div className='grid sm:grid-cols-2 gap-10'>
           {/* carrito */}
-          <div className='flex flex-col mt-5 gap-y-2 order-last md:order-1'>
-            <span className='text-xl'>Agregar más items</span>
-            <Link href={'/'} className='underline mb-5'>
-              Continúa comprando
-            </Link>
-            {/* items */}
-            {productCart.map(product => (
-              <div key={product.slug} className='flex'>
-                <Image
-                  src={`/products/${product.images[0]}`}
-                  alt={product.title}
-                  width={100}
-                  height={100}
-                  className='mr-5 rounded object-cover'
-                />
-                <div className='space-y-4 md:space-y-2'>
-                  <p className='line-clamp-1'>{product.title}</p>
-                  <p>${product.price}</p>
-                  <QuantitySelector quantity={1} />
-                  <button className='underline'>Remove</button>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ProductsInCart />
 
           <div className='bg-white rounded-md h-fit shadow-xl p-7 order-2'>
             <h2 className='text-2xl mb-2'>Resumen de orden</h2>

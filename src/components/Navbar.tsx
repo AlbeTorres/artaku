@@ -20,7 +20,7 @@ export const NavBar = () => {
   return (
     <div className='sticky top-0 bg-base-100/80 backdrop-blur-lg shadow-sm z-10 w-full'>
       <Container>
-        <nav className='flex px-5 justify-between items-center w-full '>
+        <nav className='flex lg:px-5 justify-between items-center w-full '>
           <div>
             <Link href={'/'}>
               <span className={`${titleFont.className} antialiased font-bold`}>Artaku</span>

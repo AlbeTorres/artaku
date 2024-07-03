@@ -1,10 +1,9 @@
 export const revalidate = 604800
 import { getProductbySlug } from '@/actions'
-import { SlideShow } from '@/components'
+import { AddToCart, SlideShow } from '@/components'
 import { titleFont } from '@/config/fonts'
 import { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
-import { AddToCart } from './components/AddToCart'
 
 interface Props {
   params: {

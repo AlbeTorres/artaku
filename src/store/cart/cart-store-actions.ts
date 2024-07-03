@@ -1,25 +1,5 @@
 import { CartProduct } from '@/interfaces'
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-
-interface State {
-  cart: CartProduct[]
-  getTotalItems: () => number
-  addProductToCart: (product: CartProduct) => void
-  //   updateProductQuantity
-  //   removeProductToCart
-}
-
-export const useCartStore = create<State>()(
-  persist(
-    (set, get) => ({
-      cart: [],
-      getTotalItems: () => getTotalItems(get()),
-      addProductToCart: (product: CartProduct) => addProductToCart(get(), set, product),
-    }),
-    { name: 'shopping-cart' }
-  )
-)
+import { State } from './cart-store'
 
 export function addProductToCart(
   state: State,
@@ -48,4 +28,22 @@ export function addProductToCart(
 export function getTotalItems(state: State) {
   const { cart } = state
   return cart.reduce((total, item) => total + item.quantity, 0)
+}
+
+export function updateProductQuantity(
+  state: State,
+  set: (newState: Partial<State>) => void,
+  product: CartProduct,
+  quantity: number
+) {
+  const { cart } = state
+
+  const updateCartProducts = cart.map(item => {
+    if (item.id === product.id && item.size === product.size) {
+      return { ...item, quantity: quantity }
+    }
+    return item
+  })
+
+  set({ cart: updateCartProducts })
 }

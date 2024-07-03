@@ -20,6 +20,7 @@ export interface CartProduct {
   title: string
   price: number
   quantity: number
+  inStock: number
 }
 
 export type Category = 'men' | 'women' | 'kid' | 'unisex'

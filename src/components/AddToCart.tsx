@@ -1,9 +1,10 @@
 'use client'
-import { QuantitySelector, SizeSelector } from '@/components'
+
 import { CartProduct, Product, Size } from '@/interfaces'
 import { useCartStore } from '@/store'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import { QuantitySelector, SizeSelector } from '.'
 
 interface Props {
   product: Product
@@ -31,6 +32,7 @@ export const AddToCart = ({ product }: Props) => {
       title: product.title,
       price: product.price,
       quantity: quantity,
+      inStock: product.inStock,
     }
     addProductToCart(cartProduct)
     setSize(undefined)
