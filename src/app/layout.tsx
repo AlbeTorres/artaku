@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { inter } from '@/config/fonts'
+import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -26,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Toaster position='bottom-right' />
+        {children}
+      </body>
     </html>
   )
 }

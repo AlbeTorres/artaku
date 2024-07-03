@@ -1,9 +1,10 @@
 export const revalidate = 604800
 import { getProductbySlug } from '@/actions'
-import { QuantitySelector, SizeSelector, SlideShow } from '@/components'
+import { SlideShow } from '@/components'
 import { titleFont } from '@/config/fonts'
 import { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
+import { AddToCart } from './components/AddToCart'
 
 interface Props {
   params: {
@@ -54,14 +55,9 @@ export default async function ProductPage({ params }: Props) {
       {/* detalles */}
       <div className='px-5 pt-8 md:pt-0'>
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>{title}</h1>
-        <p className='text-lg mb-5'>{price}</p>
+        <p className='text-lg mb-5'>${price}</p>
 
-        {/* selector de tallas */}
-        <SizeSelector availableSize={sizes} selectedSize={sizes[0]} />
-        {/* selector de cantidad */}
-        <QuantitySelector quantity={1} />
-
-        <button className='btn-primary my-5'>Agregar al carrito</button>
+        <AddToCart product={product} />
 
         <h3 className='font-bold text-sm'>Descripción</h3>
         <p className='font-light'>{description}</p>
