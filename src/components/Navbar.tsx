@@ -1,12 +1,22 @@
 'use client'
 import { titleFont } from '@/config/fonts'
+import { useCartStore } from '@/store'
 import { useUIStore } from '@/store/ui-store'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { IoCartOutline, IoSearchOutline } from 'react-icons/io5'
 import { Container } from './Container'
 
 export const NavBar = () => {
   const openMenu = useUIStore(state => state.openSideMenu)
+  const cartItems = useCartStore(state => state.getTotalItems())
+
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    setLoaded(true)
+  }, [])
+
   return (
     <div className='sticky top-0 bg-base-100/80 backdrop-blur-lg shadow-sm z-10 w-full'>
       <Container>
@@ -33,9 +43,11 @@ export const NavBar = () => {
             </Link>
             <Link href={'/cart'}>
               <div className='relative'>
-                <span className='absolute text-xs rounded-full px-1 font-bold -top-2 -right-2 bg-purple-700 text-white'>
-                  3
-                </span>
+                {cartItems > 0 && loaded && (
+                  <span className='absolute text-xs rounded-full px-1 font-bold -top-2 -right-2 bg-purple-700 text-white'>
+                    {cartItems}
+                  </span>
+                )}
                 <IoCartOutline className='w-5 h-5' />
               </div>
             </Link>
