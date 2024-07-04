@@ -7,6 +7,7 @@ import { QuantitySelector } from '.'
 export const ProductsInCart = () => {
   const productsInCart = useCartStore(state => state.cart)
   const updateProductQuantity = useCartStore(state => state.updateProductQuantity)
+  const removeProductToCart = useCartStore(state => state.removeProductToCart)
   return (
     <div className='flex flex-col mt-5 gap-y-2 order-last md:order-1'>
       <span className='text-xl'>Agregar más items</span>
@@ -37,8 +38,9 @@ export const ProductsInCart = () => {
               maxStock={product.inStock}
               setQuantity={quantity => updateProductQuantity(product, quantity)}
             />
-            <p>{product.inStock}</p>
-            <button className='underline'>Remove</button>
+            <button onClick={() => removeProductToCart(product)} className='underline'>
+              Remove
+            </button>
           </div>
         </div>
       ))}

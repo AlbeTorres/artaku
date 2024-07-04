@@ -47,3 +47,15 @@ export function updateProductQuantity(
 
   set({ cart: updateCartProducts })
 }
+
+export function removeProductToCart(
+  state: State,
+  set: (newState: Partial<State>) => void,
+  product: CartProduct
+) {
+  const { cart } = state
+
+  const cartProducts = cart.filter(item => item.id !== product.id || item.size !== product.size)
+
+  set({ cart: cartProducts })
+}
