@@ -13,8 +13,6 @@ interface Props {
 }
 
 export const SideBar = ({ isSideMenuOpen, closeMenu, session }: Props) => {
-  console.log(session)
-
   const isAuthenticated = !!session?.user
 
   return (
@@ -62,8 +60,8 @@ export const SideBar = ({ isSideMenuOpen, closeMenu, session }: Props) => {
           {options.map(option => (
             <MenuItem
               hide={
-                (isAuthenticated && option.title === 'Ingresar') ||
-                (!isAuthenticated && option.title === 'Profile')
+                (!isAuthenticated && option.title !== 'Ingresar') ||
+                (isAuthenticated && option.title === 'Ingresar')
               }
               close={closeMenu}
               key={option.title}
@@ -87,6 +85,7 @@ export const SideBar = ({ isSideMenuOpen, closeMenu, session }: Props) => {
         <div className='space-y-5'>
           {admin_options.map(option => (
             <MenuItem
+              hide={!isAuthenticated || session.user.role !== 'admin'}
               key={option.title}
               icon={option.icon}
               title={option.title}
