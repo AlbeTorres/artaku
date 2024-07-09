@@ -1,35 +1,11 @@
-import { PasswordTextField, TextField } from '@/components'
+import { LoginForm } from '@/components/LoginForm'
 import { titleFont } from '@/config/fonts'
-import Link from 'next/link'
-import { FaEnvelope } from 'react-icons/fa'
 
 export default function LoginPage() {
   return (
     <div className='flex flex-col min-h-screen justify-center'>
       <h1 className={`${titleFont.className} text-2xl mb-5`}>Ingresar</h1>
-
-      <div className='flex flex-col gap-y-4'>
-        <TextField placeholder='Correo electónico' icon={FaEnvelope} />
-        <PasswordTextField className='w-full' placeholder='Contraseña' />
-
-        <button className='btn-primary'>Ingresar</button>
-        <Link href={'/recoverypassemail'}>
-          <p className='text-xs text-center hover:text-purple-700 hover:underline mt-2'>
-            Olvidé mi contraseña
-          </p>
-        </Link>
-
-        {/* divisor line */}
-        <div className='flex items-center my-5'>
-          <div className='flex-1 border-t border-gray-500'></div>
-          <div className='px-2 text-gray-800'>O</div>
-          <div className='flex-1 border-t border-gray-500'></div>
-        </div>
-
-        <Link href='/auth/new-account' className='btn-secondary text-center'>
-          Crear una nueva cuenta
-        </Link>
-      </div>
+      <LoginForm />
     </div>
   )
 }

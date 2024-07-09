@@ -1,17 +1,18 @@
 'use client'
 import { titleFont } from '@/config/fonts'
 import { useCartStore } from '@/store'
-import { useUIStore } from '@/store/ui-store'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { IoCartOutline, IoSearchOutline } from 'react-icons/io5'
 import { Container } from './Container'
 
-export const NavBar = () => {
-  const openMenu = useUIStore(state => state.openSideMenu)
-  const cartItems = useCartStore(state => state.getTotalItems())
+interface Props {
+  openMenu(): void
+}
 
+export const NavBar = ({ openMenu }: Props) => {
   const [loaded, setLoaded] = useState(false)
+  const cartItems = useCartStore(state => state.getTotalItems())
 
   useEffect(() => {
     setLoaded(true)
@@ -52,7 +53,7 @@ export const NavBar = () => {
               </div>
             </Link>
             <button
-              onClick={() => openMenu()}
+              onClick={openMenu}
               className='m-2 p-2 rounded-md transition-all hover:bg-gray-100'
             >
               Menú

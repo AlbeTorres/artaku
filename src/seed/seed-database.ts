@@ -6,11 +6,12 @@ config()
 
 async function main() {
   // 1.Borrar registros viejos
-  await prisma.product.deleteMany()
   await prisma.productImage.deleteMany()
+  await prisma.product.deleteMany()
   await prisma.category.deleteMany()
+  await prisma.user.deleteMany()
 
-  const { categories, products } = initialData
+  const { categories, products, users } = initialData
 
   // 2.Insertar categorias
   const categorydata = categories.map(name => ({ name }))
@@ -40,6 +41,11 @@ async function main() {
     const imagesData = images.map(image => ({ url: image, productId: dbProduct.id }))
 
     await prisma.productImage.createMany({ data: imagesData })
+  })
+
+  //insertar users
+  await prisma.user.createMany({
+    data: users,
   })
 
   console.log('seed ejecutado correctamente')

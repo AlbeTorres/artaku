@@ -1,6 +1,5 @@
 import {
   IoLogInOutline,
-  IoLogOutOutline,
   IoPeopleOutline,
   IoPersonOutline,
   IoShirtOutline,
@@ -11,7 +10,7 @@ export const options = [
   {
     icon: IoPersonOutline,
     title: 'Perfil',
-    href: '/',
+    href: '/profile',
   },
   {
     icon: IoTicketOutline,
@@ -22,11 +21,6 @@ export const options = [
     icon: IoLogInOutline,
     title: 'Ingresar',
     href: '/auth/login',
-  },
-  {
-    icon: IoLogOutOutline,
-    title: 'Salir',
-    href: '/',
   },
 ]
 

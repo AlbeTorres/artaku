@@ -1,13 +1,21 @@
 'use client'
-import { useUIStore } from '@/store/ui-store'
+import { logout } from '@/actions'
 import { admin_options, options } from '@/utils'
 import clsx from 'clsx'
-import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5'
+import { Session } from 'next-auth'
+import { IoCloseOutline, IoLogOutOutline, IoSearchOutline } from 'react-icons/io5'
 import { MenuItem } from './MenuItem'
 
-export const SideBar = () => {
-  const isSideMenuOpen = useUIStore(state => state.isSideMenuOpen)
-  const closeMenu = useUIStore(state => state.closeSideMenu)
+interface Props {
+  isSideMenuOpen: boolean
+  closeMenu(): void
+  session: Session | null
+}
+
+export const SideBar = ({ isSideMenuOpen, closeMenu, session }: Props) => {
+  console.log(session)
+
+  const isAuthenticated = !!session?.user
 
   return (
     <div>
@@ -53,12 +61,26 @@ export const SideBar = () => {
         <div className='space-y-5'>
           {options.map(option => (
             <MenuItem
+              hide={
+                (isAuthenticated && option.title === 'Ingresar') ||
+                (!isAuthenticated && option.title === 'Profile')
+              }
+              close={closeMenu}
               key={option.title}
               icon={option.icon}
               title={option.title}
               href={option.href}
             />
           ))}
+          {isAuthenticated && (
+            <button
+              onClick={() => logout()}
+              className='flex items-center p-2 hover:bg-gray-100 rounded transition-all'
+            >
+              <IoLogOutOutline size={25} />
+              <span className='ml-3 text-md'>{'Salir'}</span>
+            </button>
+          )}
         </div>
 
         <div className='w-full h-px bg-gray-200 my-3' />
@@ -69,6 +91,7 @@ export const SideBar = () => {
               icon={option.icon}
               title={option.title}
               href={option.href}
+              close={closeMenu}
             />
           ))}
         </div>
