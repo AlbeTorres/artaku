@@ -31,7 +31,7 @@ export const PhoneTextField = ({
         placeholder={placeholder}
         numberInputProps={{
           className:
-            '!w-full !input !h-10 !border-2 !border-gray-200 focus:!outline-none  bg-transparent font-regular focus:!ring-0',
+            '!w-full !bg-white !h-10 !border-2 !border-gray-200 focus:!outline-none  bg-transparent font-regular focus:!ring-0',
           id: 'phone',
         }}
         className='w-full'

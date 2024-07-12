@@ -1,3 +1,4 @@
+export * from './AddressForm'
 export * from './AddToCart'
 export * from './Button'
 export * from './CartSummary'
