@@ -10,8 +10,9 @@ async function main() {
   await prisma.product.deleteMany()
   await prisma.category.deleteMany()
   await prisma.user.deleteMany()
+  await prisma.country.deleteMany()
 
-  const { categories, products, users } = initialData
+  const { categories, products, users, countries } = initialData
 
   // 2.Insertar categorias
   const categorydata = categories.map(name => ({ name }))
@@ -47,6 +48,8 @@ async function main() {
   await prisma.user.createMany({
     data: users,
   })
+
+  await prisma.country.createMany({ data: countries })
 
   console.log('seed ejecutado correctamente')
 }

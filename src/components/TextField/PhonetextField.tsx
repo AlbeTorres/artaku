@@ -39,7 +39,7 @@ export const PhoneTextField = ({
         value={value}
         onChange={onChange}
       />
-      {errors && <p className='mt-1 text-red-500'>{errors}</p>}
+      {errors && <p className='mt-1 text-red-500 text-sm'>{errors}</p>}
     </div>
   )
 }

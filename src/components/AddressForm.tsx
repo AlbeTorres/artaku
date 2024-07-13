@@ -1,9 +1,9 @@
 'use client'
 import { regexps } from '@/utils/validations'
-import Link from 'next/link'
 import { Controller, useForm } from 'react-hook-form'
 import { FaUser } from 'react-icons/fa'
 import { isValidPhoneNumber } from 'react-phone-number-input'
+import { Button } from './Button'
 import { CheckBox } from './Checkbox'
 import { Select } from './Select'
 import { PhoneTextField, TextField } from './TextField'
@@ -27,9 +27,19 @@ export const AddressForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AddressForm>()
+  } = useForm<AddressForm>({
+    defaultValues: {},
+  })
+
+  const onSubmit = (data: AddressForm) => {
+    console.log(data)
+  }
+
   return (
-    <form className='grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2'>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='grid grid-cols-1 gap-2 sm:gap-5 sm:grid-cols-2'
+    >
       <TextField
         required
         label='Nombre'
@@ -47,12 +57,13 @@ export const AddressForm = () => {
           },
         })}
       />
+
       <TextField
         required
         label='Apellido'
         placeholder='Doe'
         icon={FaUser}
-        error={errors.name?.message}
+        error={errors.lastname?.message}
         {...register('lastname', {
           required: {
             value: true,
@@ -69,11 +80,11 @@ export const AddressForm = () => {
         label='Dirección'
         placeholder='1922 Alexander Dr'
         icon={FaUser}
-        error={errors.name?.message}
+        error={errors.address?.message}
         {...register('address', {
           required: {
             value: true,
-            message: 'Dirección requerido',
+            message: 'Dirección requerida',
           },
           pattern: {
             value: regexps.name,
@@ -85,7 +96,7 @@ export const AddressForm = () => {
         label='Dirección 2'
         placeholder='1922 Alexander Dr'
         icon={FaUser}
-        error={errors.name?.message}
+        error={errors.address2?.message}
         {...register('address2', {
           pattern: {
             value: regexps.name,
@@ -98,7 +109,7 @@ export const AddressForm = () => {
         label='Código postal'
         placeholder='33147'
         icon={FaUser}
-        error={errors.name?.message}
+        error={errors.zipcode?.message}
         {...register('zipcode', {
           required: {
             value: true,
@@ -115,7 +126,7 @@ export const AddressForm = () => {
         label='Ciudad'
         placeholder='Miami'
         icon={FaUser}
-        error={errors.name?.message}
+        error={errors.city?.message}
         {...register('city', {
           required: {
             value: true,
@@ -128,12 +139,14 @@ export const AddressForm = () => {
         })}
       />
       <Select
+        required
         error={errors.country?.message}
-        items={['EEUU']}
-        placeholder='Cuba'
+        items={['EEUU', 'Cuba']}
         label='País'
         register={register}
-        name='provincia'
+        name='country'
+        getOptionLabel={item => item}
+        getOptionValue={item => item}
       />
 
       <Controller
@@ -158,9 +171,9 @@ export const AddressForm = () => {
 
       <div className='flex flex-col mb-2 gap-y-4 sm:mt-10'>
         <CheckBox color='purple' className='' labelText='¿Recordar dirección?' />
-        <Link href='/checkout' className='btn-primary flex w-full sm:w-1/2 justify-center '>
+        <Button type='submit' className='btn-primary flex w-full sm:w-1/2 justify-center '>
           Siguiente
-        </Link>
+        </Button>
       </div>
     </form>
   )
