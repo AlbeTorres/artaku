@@ -1,5 +1,8 @@
 'use client'
+import { useAddressStore } from '@/store/address/address-store'
 import { regexps } from '@/utils/validations'
+import { Country } from '@prisma/client'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { FaUser } from 'react-icons/fa'
 import { isValidPhoneNumber } from 'react-phone-number-input'
@@ -8,31 +11,44 @@ import { CheckBox } from './Checkbox'
 import { Select } from './Select'
 import { PhoneTextField, TextField } from './TextField'
 
+interface Props {
+  countries: Country[]
+}
+
 interface AddressForm {
-  name: string
-  lastname: string
+  firstName: string
+  lastName: string
   address: string
   address2?: string
   zipcode: number
   city: string
   country: string
   phone: string
+  rememberaddress: boolean
 }
 
-export const AddressForm = () => {
+export const AddressForm = ({ countries }: Props) => {
+  const setAddress = useAddressStore(state => state.setAddress)
+  const address = useAddressStore(state => state.address)
   const {
     control,
-    setValue,
-    getValues,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<AddressForm>({
     defaultValues: {},
   })
 
+  useEffect(() => {
+    console.log(address)
+    if (address.firstName) {
+      reset(address)
+    }
+  }, [address]) // eslint-disable-line react-hooks/exhaustive-deps
+
   const onSubmit = (data: AddressForm) => {
-    console.log(data)
+    setAddress(data)
   }
 
   return (
@@ -45,8 +61,8 @@ export const AddressForm = () => {
         label='Nombre'
         placeholder='Jhon '
         icon={FaUser}
-        error={errors.name?.message}
-        {...register('name', {
+        error={errors.firstName?.message}
+        {...register('firstName', {
           required: {
             value: true,
             message: 'Nombre requerido',
@@ -63,8 +79,8 @@ export const AddressForm = () => {
         label='Apellido'
         placeholder='Doe'
         icon={FaUser}
-        error={errors.lastname?.message}
-        {...register('lastname', {
+        error={errors.lastName?.message}
+        {...register('lastName', {
           required: {
             value: true,
             message: 'Apellido requerido',
@@ -141,12 +157,12 @@ export const AddressForm = () => {
       <Select
         required
         error={errors.country?.message}
-        items={['EEUU', 'Cuba']}
+        items={countries}
         label='País'
         register={register}
         name='country'
-        getOptionLabel={item => item}
-        getOptionValue={item => item}
+        getOptionLabel={item => item.name}
+        getOptionValue={item => item.id}
       />
 
       <Controller
@@ -170,7 +186,13 @@ export const AddressForm = () => {
       />
 
       <div className='flex flex-col mb-2 gap-y-4 sm:mt-10'>
-        <CheckBox color='purple' className='' labelText='¿Recordar dirección?' />
+        <CheckBox
+          name='rememberaddress'
+          register={register}
+          color='purple'
+          className=''
+          labelText='¿Recordar dirección?'
+        />
         <Button type='submit' className='btn-primary flex w-full sm:w-1/2 justify-center '>
           Siguiente
         </Button>

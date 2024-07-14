@@ -1,24 +1,27 @@
 'use client'
 import clsx from 'clsx'
+import { UseFormRegister } from 'react-hook-form'
 
 interface Props {
   className?: string
   labelText?: string
   color?: 'green' | 'red' | 'purple' | 'gray' | 'yellow' | 'blue' | 'black'
   checked?: boolean
+  register: UseFormRegister<any>
+  name: string
 }
-export const CheckBox = ({ className, labelText, color = 'blue', checked = false }: Props) => {
+export const CheckBox = ({ register, name, className, labelText, color = 'blue' }: Props) => {
   return (
     <div className='inline-flex items-center'>
       <label className='relative flex cursor-pointer items-center rounded-full p-3'>
         <input
+          {...register(name)}
           type='checkbox'
           className={clsx(
-            `before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-500 border-${color}-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-${color}-gray-500 before:opacity-0 before:transition-opacity checked:border-${color}-500 checked:bg-${color}-500 checked:before:bg-${color}-500 hover:before:opacity-10`,
+            `before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-gray-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-${color}-gray-500 before:opacity-0 before:transition-opacity checked:border-${color}-500 checked:bg-${color}-500 checked:before:bg-${color}-500 hover:before:opacity-10`,
             className
           )}
           id='checkbox'
-          checked={checked}
         />
         <div className='pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 text-white opacity-0 transition-opacity peer-checked:opacity-100'>
           <svg
