@@ -1,8 +1,8 @@
 'use client'
-import { useAddressStore } from '@/store/address/address-store'
 import { regexps } from '@/utils/validations'
-import { Country } from '@prisma/client'
-import { useEffect } from 'react'
+
+import { deleteUserAddress, setUserAddress } from '@/actions'
+import { Address, Country } from '@/interfaces'
 import { Controller, useForm } from 'react-hook-form'
 import { FaUser } from 'react-icons/fa'
 import { isValidPhoneNumber } from 'react-phone-number-input'
@@ -13,42 +13,31 @@ import { PhoneTextField, TextField } from './TextField'
 
 interface Props {
   countries: Country[]
+  userId?: string
+  address?: Address
 }
 
-interface AddressForm {
-  firstName: string
-  lastName: string
-  address: string
-  address2?: string
-  zipcode: number
-  city: string
-  country: string
-  phone: string
+type AddressForm = Address & {
   rememberaddress: boolean
 }
 
-export const AddressForm = ({ countries }: Props) => {
-  const setAddress = useAddressStore(state => state.setAddress)
-  const address = useAddressStore(state => state.address)
+export const AddressForm = ({ countries, userId, address }: Props) => {
   const {
     control,
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<AddressForm>({
-    defaultValues: {},
+    defaultValues: { ...address, rememberaddress: true },
   })
 
-  useEffect(() => {
-    console.log(address)
-    if (address.firstName) {
-      reset(address)
+  const onSubmit = async (data: AddressForm) => {
+    const { zipcode, rememberaddress, ...rest } = data
+    if (data.rememberaddress) {
+      setUserAddress({ zipcode: Number(zipcode), ...rest }, userId!)
+    } else {
+      deleteUserAddress(userId!)
     }
-  }, [address]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const onSubmit = (data: AddressForm) => {
-    setAddress(data)
   }
 
   return (

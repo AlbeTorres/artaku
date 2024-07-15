@@ -27,7 +27,18 @@ export type Category = 'men' | 'women' | 'kid' | 'unisex'
 export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
 export type Type = 'shirts' | 'pants' | 'hoodies' | 'hats'
 
-interface Country {
+export interface Country {
   name: string
   id: string
+}
+
+export interface Address {
+  firstName: string
+  lastName: string
+  address: string
+  address2?: string
+  zipcode: number
+  city: string
+  country: string
+  phone: string
 }
