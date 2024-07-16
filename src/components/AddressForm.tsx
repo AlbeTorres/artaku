@@ -3,6 +3,8 @@ import { regexps } from '@/utils/validations'
 
 import { deleteUserAddress, setUserAddress } from '@/actions'
 import { Address, Country } from '@/interfaces'
+import { useAddressStore } from '@/store/address/address-store'
+import { useRouter } from 'next/navigation'
 import { Controller, useForm } from 'react-hook-form'
 import { FaUser } from 'react-icons/fa'
 import { isValidPhoneNumber } from 'react-phone-number-input'
@@ -22,6 +24,8 @@ type AddressForm = Address & {
 }
 
 export const AddressForm = ({ countries, userId, address }: Props) => {
+  const router = useRouter()
+  const setLocalAddress = useAddressStore(address => address.setAddress)
   const {
     control,
     register,
@@ -32,12 +36,14 @@ export const AddressForm = ({ countries, userId, address }: Props) => {
   })
 
   const onSubmit = async (data: AddressForm) => {
+    setLocalAddress(data)
     const { zipcode, rememberaddress, ...rest } = data
     if (data.rememberaddress) {
       setUserAddress({ zipcode: Number(zipcode), ...rest }, userId!)
     } else {
       deleteUserAddress(userId!)
     }
+    router.push('/checkout')
   }
 
   return (
