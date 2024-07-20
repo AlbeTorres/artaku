@@ -6,6 +6,9 @@ config()
 
 async function main() {
   // 1.Borrar registros viejos
+  await prisma.orderAddress.deleteMany()
+  await prisma.orderItem.deleteMany()
+  await prisma.order.deleteMany()
   await prisma.userAddress.deleteMany()
   await prisma.productImage.deleteMany()
   await prisma.product.deleteMany()

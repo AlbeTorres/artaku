@@ -1,8 +1,10 @@
 'use client'
+import { placeOrder } from '@/actions'
 import { useCartStore } from '@/store'
 import { useAddressStore } from '@/store/address/address-store'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Button } from './Button'
 
 export const CheckoutOrder = () => {
   const useAddress = useAddressStore(addres => addres.address)
@@ -13,6 +15,18 @@ export const CheckoutOrder = () => {
   const subtotal = productsInCart.reduce((s, p) => s + p.price * p.quantity, 0)
   const nproducts = productsInCart.reduce((s, p) => s + p.quantity, 0)
   const impuesto = 0.15
+
+  const onPlaceOrder = async () => {
+    const productsToOrder = productsInCart.map(product => ({
+      productId: product.id,
+      quantity: product.quantity,
+      size: product.size,
+    }))
+
+    const eso = await placeOrder(productsToOrder, useAddress)
+    console.log(eso)
+  }
+
   return (
     <div className='grid sm:grid-cols-2 gap-10'>
       <div className='flex flex-col mt-5 gap-y-2 order-last md:order-1'>
@@ -80,9 +94,9 @@ export const CheckoutOrder = () => {
               Politica de privacidad
             </Link>
           </p>
-          <Link className='flex justify-center btn-primary' href={'/orders/123'}>
+          <Button className='btn-primary w-full' onClick={onPlaceOrder}>
             Pagar
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

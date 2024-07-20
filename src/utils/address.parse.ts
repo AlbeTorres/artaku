@@ -12,7 +12,7 @@ interface DBAddress {
 }
 export const parseAddress = (address: DBAddress | null) => {
   if (address) {
-    const { countryId, address2, ...rest } = address
+    const { userId, countryId, address2, ...rest } = address
     if (address2) {
       return { country: countryId, address2, ...rest }
     } else {

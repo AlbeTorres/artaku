@@ -36,8 +36,9 @@ export const AddressForm = ({ countries, userId, address }: Props) => {
   })
 
   const onSubmit = async (data: AddressForm) => {
-    setLocalAddress(data)
     const { zipcode, rememberaddress, ...rest } = data
+
+    setLocalAddress({ zipcode: Number(zipcode), ...rest })
     if (data.rememberaddress) {
       setUserAddress({ zipcode: Number(zipcode), ...rest }, userId!)
     } else {
