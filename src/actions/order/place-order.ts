@@ -48,7 +48,7 @@ export const placeOrder = async (orderProducts: ProductToOrder[], orderAddress: 
     const itemsInOrder = orderProducts.reduce((count, p) => p.quantity + count, 0)
 
     //insertar en la DB
-    return await insertOrderToDB(
+    const data = await insertOrderToDB(
       userId,
       orderAddress,
       itemsInOrder,
@@ -58,10 +58,15 @@ export const placeOrder = async (orderProducts: ProductToOrder[], orderAddress: 
       orderProducts,
       products
     )
-  } catch (error) {
-    console.log(error)
+
+    return {
+      ok: true,
+      data,
+    }
+  } catch (error: any) {
     return {
       ok: false,
+      message: error.message,
     }
   }
 }
@@ -78,78 +83,74 @@ const insertOrderToDB = async (
 ) => {
   const { country, id, ...restAddress } = orderAddress
 
-  try {
-    const prismaTx = await prisma.$transaction(async tx => {
-      //1 actualizar el stock de los productos
+  const prismaTx = await prisma.$transaction(async tx => {
+    //1 actualizar el stock de los productos
 
-      const updateProductsPromises = products.map(product => {
-        //acomular valores
-        const productQuantity = orderProducts
-          .filter(p => p.productId === product.id)
-          .reduce((acc, item) => item.quantity + acc, 0)
+    const updateProductsPromises = products.map(product => {
+      //acomular valores
+      const productQuantity = orderProducts
+        .filter(p => p.productId === product.id)
+        .reduce((acc, item) => item.quantity + acc, 0)
 
-        if (productQuantity === 0) {
-          throw new Error(`${product.id}, no tiene cantidad definida`)
-        }
+      if (productQuantity === 0) {
+        throw new Error(`${product.id}, no tiene cantidad definida`)
+      }
 
-        return tx.product.update({
-          where: { id: product.id },
-          data: {
-            inStock: { decrement: productQuantity },
-          },
-        })
-      })
-
-      const updatedProducts = await Promise.all(updateProductsPromises)
-
-      //verificar valores negativos en las existencia = no hay stock
-
-      updatedProducts.forEach(product => {
-        if (product.inStock < 0) {
-          throw new Error(`${product.title} no tiene inventario suficiente`)
-        }
-      })
-
-      //2 crear la orden encabezado-detalle
-      const order = await tx.order.create({
+      return tx.product.update({
+        where: { id: product.id },
         data: {
-          userId: userIdTx!,
-          itemsInOrder: itemsInOrder,
-          subtotal: subTotal,
-          tax: tax,
-          total: total,
-
-          OrderItem: {
-            createMany: {
-              data: orderProducts.map(p => ({
-                quantity: p.quantity,
-                size: p.size,
-                productId: p.productId,
-                price: products.find(product => product.id === p.productId)?.price ?? 0,
-              })),
-            },
-          },
+          inStock: { decrement: productQuantity },
         },
       })
-      //3 crear direccion
-      const addressTx = await tx.orderAddress.create({
-        data: {
-          ...restAddress,
-          //Relations
-          countryId: country,
-          orderId: order.id,
-        },
-      })
+    })
 
-      return {
-        order: order,
-        orderAddress: addressTx,
-        updatedproducts: updatedProducts,
+    const updatedProducts = await Promise.all(updateProductsPromises)
+
+    //verificar valores negativos en las existencia = no hay stock
+
+    updatedProducts.forEach(product => {
+      if (product.inStock < 0) {
+        throw new Error(`${product.title} no tiene inventario suficiente`)
       }
     })
 
-    return prismaTx
-  } catch (error: any) {
-    return { ok: false, message: error.message }
-  }
+    //2 crear la orden encabezado-detalle
+    const order = await tx.order.create({
+      data: {
+        userId: userIdTx!,
+        itemsInOrder: itemsInOrder,
+        subtotal: subTotal,
+        tax: tax,
+        total: total,
+
+        OrderItem: {
+          createMany: {
+            data: orderProducts.map(p => ({
+              quantity: p.quantity,
+              size: p.size,
+              productId: p.productId,
+              price: products.find(product => product.id === p.productId)?.price ?? 0,
+            })),
+          },
+        },
+      },
+    })
+    //3 crear direccion
+    const addressTx = await tx.orderAddress.create({
+      data: {
+        ...restAddress,
+        //Relations
+        countryId: country,
+        orderId: order.id,
+      },
+    })
+
+    return {
+      order: order,
+      orderAddress: addressTx,
+      updatedproducts: updatedProducts,
+    }
+  })
+
+  return prismaTx
 }

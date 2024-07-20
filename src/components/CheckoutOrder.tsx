@@ -4,11 +4,17 @@ import { useCartStore } from '@/store'
 import { useAddressStore } from '@/store/address/address-store'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { Button } from './Button'
 
 export const CheckoutOrder = () => {
+  const router = useRouter()
+  const [orderStatus, setOrderStatus] = useState(false)
   const useAddress = useAddressStore(addres => addres.address)
   const productsInCart = useCartStore(state => state.cart)
+  const clearCart = useCartStore(state => state.clearCart)
 
   const { firstName, lastName, address, phone, zipcode, city, country, address2 } = useAddress
 
@@ -17,14 +23,24 @@ export const CheckoutOrder = () => {
   const impuesto = 0.15
 
   const onPlaceOrder = async () => {
+    setOrderStatus(true)
     const productsToOrder = productsInCart.map(product => ({
       productId: product.id,
       quantity: product.quantity,
       size: product.size,
     }))
 
-    const eso = await placeOrder(productsToOrder, useAddress)
-    console.log(eso)
+    const resp = await placeOrder(productsToOrder, useAddress)
+
+    if (!resp.ok) {
+      setOrderStatus(false)
+      toast.error('No se pudo crear la orden')
+      return
+    }
+    //todo salio bien
+    clearCart()
+    toast.success('Orden creada correctamente')
+    router.replace('/orders/' + resp.data?.order.id)
   }
 
   return (
@@ -94,7 +110,12 @@ export const CheckoutOrder = () => {
               Politica de privacidad
             </Link>
           </p>
-          <Button className='btn-primary w-full' onClick={onPlaceOrder}>
+          <Button
+            loading={orderStatus}
+            disabled={orderStatus}
+            className='btn-primary w-full'
+            onClick={onPlaceOrder}
+          >
             Pagar
           </Button>
         </div>
