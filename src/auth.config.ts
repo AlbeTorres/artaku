@@ -14,6 +14,8 @@ type SessionUser = AdapterUser & {
   image: string
 } & User
 
+const protectedRoutes = ['/checkout', '/orders', '/profile']
+
 export const authConfig: NextAuthConfig = {
   pages: {
     signIn: '/auth/login',
@@ -22,7 +24,7 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-      const isOnProtected = nextUrl.pathname.startsWith('/checkout')
+      const isOnProtected = protectedRoutes.some(route => nextUrl.pathname.startsWith(route))
 
       if (isOnProtected) {
         if (isLoggedIn) return true

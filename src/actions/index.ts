@@ -6,6 +6,7 @@ export { logout } from './auth/logout'
 export { regsiterUser } from './auth/register'
 export { getCountries } from './country/get-countries'
 export { getOrderbyId } from './order/get-order-by-id'
+export { getOrdersByUser } from './order/get-orders-by-user'
 export { placeOrder } from './order/place-order'
 
 export * from './products/get-product-by-slug'
