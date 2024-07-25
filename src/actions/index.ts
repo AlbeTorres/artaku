@@ -8,6 +8,7 @@ export { getCountries } from './country/get-countries'
 export { getOrderbyId } from './order/get-order-by-id'
 export { getOrdersByUser } from './order/get-orders-by-user'
 export { placeOrder } from './order/place-order'
-
+export { setTransactionId } from './order/set-transaction-id'
+export { paypalCheckPayment } from './payments/paypal-check-payment'
 export * from './products/get-product-by-slug'
 export * from './products/product-pagination'

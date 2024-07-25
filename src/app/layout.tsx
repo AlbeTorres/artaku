@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { inter } from '@/config/fonts'
-import { NextAuthProvider } from '@/providers'
+import { Providers } from '@/providers'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={inter.className}>
         <Toaster position='bottom-right' />
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

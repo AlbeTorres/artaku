@@ -15,7 +15,7 @@ export const options = [
   {
     icon: IoTicketOutline,
     title: 'Órdenes',
-    href: '/',
+    href: '/orders',
   },
   {
     icon: IoLogInOutline,

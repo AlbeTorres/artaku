@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { getOrderbyId } from '@/actions'
-import { Title } from '@/components'
+import { PaypalButton, Title } from '@/components'
 import clsx from 'clsx'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -28,6 +28,18 @@ export default async function OrderPage({ params }: Props) {
         <div className='grid sm:grid-cols-2 gap-10'>
           {/* carrito */}
           <div className='flex flex-col mt-5 gap-y-2 order-last md:order-1'>
+            <div className='mt-4'>
+              <div
+                className={clsx(
+                  'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
+
+                  order?.isPaid ? 'bg-green-500' : 'bg-red-500'
+                )}
+              >
+                <IoCardOutline size={30} />
+                <span className='mx-2'>{order?.isPaid ? 'Pagada' : 'Pendiente de pago'}</span>
+              </div>
+            </div>
             {/* items */}
             {order?.OrderItem.map(product => (
               <div key={product.product.slug + '-' + product.size} className='flex'>
@@ -76,17 +88,9 @@ export default async function OrderPage({ params }: Props) {
               <span className=''>{'Total'}</span>
               <span className='text-right'>{`$${order?.total.toFixed(2)}`}</span>
             </div>
-            <div className='mt-4'>
-              <div
-                className={clsx(
-                  'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
 
-                  order?.isPaid ? 'bg-green-500' : 'bg-red-500'
-                )}
-              >
-                <IoCardOutline size={30} />
-                <span className='mx-2'>{order?.isPaid ? 'Pagada' : 'Pendiente de pago'}</span>
-              </div>
+            <div className='mt-4'>
+              {!order!.isPaid && <PaypalButton amount={order!.total} orderId={order!.id} />}
             </div>
           </div>
         </div>
