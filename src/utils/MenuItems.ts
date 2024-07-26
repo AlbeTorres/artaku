@@ -33,11 +33,11 @@ export const admin_options = [
   {
     icon: IoTicketOutline,
     title: 'Órdenes',
-    href: '/',
+    href: '/admin/orders',
   },
   {
     icon: IoPeopleOutline,
     title: 'Usuarios',
-    href: '/',
+    href: '/admin/users',
   },
 ]
