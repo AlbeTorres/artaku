@@ -4,10 +4,10 @@ import { Gender } from '@prisma/client'
 interface Props {
   take?: number
   page?: number
-  category?: Gender
+  gender?: Gender
 }
 
-export const getPaginateProductWithImage = async ({ take = 12, page = 1, category }: Props) => {
+export const getPaginateProductWithImage = async ({ take = 12, page = 1, gender }: Props) => {
   if (isNaN(Number(page))) page = 1
   if (page < 1) page = 1
 
@@ -20,11 +20,18 @@ export const getPaginateProductWithImage = async ({ take = 12, page = 1, categor
           take: 2,
           select: {
             url: true,
+            id: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+            id: true,
           },
         },
       },
       where: {
-        gender: category,
+        gender: gender,
       },
     })
 
@@ -32,7 +39,7 @@ export const getPaginateProductWithImage = async ({ take = 12, page = 1, categor
     prisma.product.count({
       where: {
         gender: {
-          equals: category,
+          equals: gender,
         },
       },
     })
@@ -45,10 +52,7 @@ export const getPaginateProductWithImage = async ({ take = 12, page = 1, categor
     return {
       currentPage: page,
       totalPages: totalPages,
-      products: products.map(p => ({
-        ...p,
-        images: p.ProductImages.map(i => i.url),
-      })),
+      products: products,
     }
   } catch (error) {
     throw new Error('No se pudo encontrar')

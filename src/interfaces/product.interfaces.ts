@@ -1,7 +1,11 @@
+export interface ProductImage {
+  id: number
+  url: string
+}
 export interface Product {
   id: string
   description: string
-  images: string[]
+  images: ProductImage[]
   inStock: number
   price: number
   sizes: Size[]
@@ -9,7 +13,8 @@ export interface Product {
   tags: string[]
   title: string
   // type: Type
-  gender: Category
+  gender: Gender
+  category: string
 }
 
 export interface CartProduct {
@@ -23,9 +28,9 @@ export interface CartProduct {
   inStock: number
 }
 
-export type Category = 'men' | 'women' | 'kid' | 'unisex'
+export type Gender = 'men' | 'women' | 'kid' | 'unisex'
 export type Size = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
-export type Type = 'shirts' | 'pants' | 'hoodies' | 'hats'
+export type Category = 'shirts' | 'pants' | 'hoodies' | 'hats'
 
 export interface Country {
   name: string
@@ -52,3 +57,5 @@ export interface User {
   role: string
   image?: string | null
 }
+
+export type Role = 'user' | 'admin'

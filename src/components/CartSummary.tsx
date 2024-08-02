@@ -32,6 +32,8 @@ export const CartSummary = () => {
         <span className='text-right'>{`$${subTotal.toFixed(2)}`}</span>
         <span>{'Impuestos'}</span>
         <span className='text-right'>{`$${(subTotal * impuesto).toFixed(2)}`}</span>
+        <span>{'Total'}</span>
+        <span className='text-right'>{`$${(subTotal * impuesto + subTotal).toFixed(2)}`}</span>
       </div>
       <div className='mt-4'>
         <Link className='flex justify-center btn-primary' href={'/checkout/address'}>

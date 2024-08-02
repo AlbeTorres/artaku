@@ -2,13 +2,14 @@ export const revalidate = 300
 
 import { getPaginateProductWithImage } from '@/actions'
 import { Pagination, ProductGrid, Title } from '@/components'
-import { Category } from '@/interfaces'
+import { Gender } from '@/interfaces'
+import { parseProducts } from '@/utils/product.parse'
 import { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 
 type Props = {
   params: {
-    id: Category
+    id: Gender
   }
   searchParams: {
     page?: string
@@ -52,7 +53,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   const { products, totalPages } = await getPaginateProductWithImage({
     page,
-    category: id,
+    gender: id,
   })
 
   if (products.length === 0) {
@@ -66,7 +67,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   return (
     <>
       <Title title={`Articulos de ${labels[id]}`} />
-      <ProductGrid products={products} />
+      <ProductGrid products={parseProducts(products)} />
       <Pagination totalPages={totalPages} />
     </>
   )

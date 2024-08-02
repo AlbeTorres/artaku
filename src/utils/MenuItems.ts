@@ -28,7 +28,7 @@ export const admin_options = [
   {
     icon: IoShirtOutline,
     title: 'Productos',
-    href: '/',
+    href: '/admin/products',
   },
   {
     icon: IoTicketOutline,

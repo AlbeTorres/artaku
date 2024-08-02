@@ -14,7 +14,8 @@ type SessionUser = AdapterUser & {
   image: string
 } & User
 
-const protectedRoutes = ['/checkout', '/orders', '/profile']
+const protectedRoutes = ['/checkout', '/orders', '/profile', '/admin']
+const protectedAdminRoutes = ['/admin']
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -24,9 +25,24 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
+      const isAdmin = auth?.user.role === 'admin'
       const isOnProtected = protectedRoutes.some(route => nextUrl.pathname.startsWith(route))
+      const isOnAdminProtected = protectedAdminRoutes.some(route =>
+        nextUrl.pathname.startsWith(route)
+      )
 
       if (isOnProtected) {
+        if (isOnAdminProtected) {
+          if (isLoggedIn) {
+            if (isAdmin) {
+              return true
+            } else {
+              Response.redirect(process.env.NEXT_PUBLIC_WEBSITE ?? '')
+            }
+          }
+          return false
+        }
+
         if (isLoggedIn) return true
         return false // Redirect unauthenticated users to login page
       }

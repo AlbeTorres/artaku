@@ -1,6 +1,7 @@
 export const revalidate = 300
 import { getPaginateProductWithImage } from '@/actions'
 import { Pagination, ProductGrid, Title } from '@/components'
+import { parseProducts } from '@/utils/product.parse'
 import { redirect } from 'next/navigation'
 
 interface Props {
@@ -20,7 +21,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <>
       <Title title='Tienda' subtitle='Todos los productos' />
-      <ProductGrid products={products} />
+      <ProductGrid products={parseProducts(products)} />
       <Pagination totalPages={totalPages} />
     </>
   )

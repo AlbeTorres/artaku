@@ -2,6 +2,7 @@ export const revalidate = 604800
 import { getProductbySlug } from '@/actions'
 import { AddToCart, SlideShow } from '@/components'
 import { titleFont } from '@/config/fonts'
+import { parseProduct } from '@/utils/product.parse'
 import { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 
@@ -19,7 +20,9 @@ export async function generateMetadata(
   const slug = params.slug
 
   //fetch data
-  const product = await getProductbySlug(slug)
+  const response = await getProductbySlug(slug)
+
+  const product = parseProduct(response!.product)
 
   //optionally access and extend (rater than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
@@ -30,25 +33,31 @@ export async function generateMetadata(
     openGraph: {
       title: product?.title || 'Título no encontrado',
       description: product?.description || 'Descripción no encontrada',
-      images: [`/products/${product?.images[1]}`],
+      images: product?.images[1]?.url
+        ? [`/products/${product?.images[1].url}`]
+        : ['/images/zombi-sama.png'],
     },
   }
 }
 
 export default async function ProductPage({ params }: Props) {
-  const product = await getProductbySlug(params.slug)
+  const response = await getProductbySlug(params.slug)
 
-  if (!product) {
+  if (!response?.ok) {
     notFound()
   }
 
-  const { title, price, description, sizes, images } = product
+  const product = parseProduct(response.product)
+
+  const { title, price, description, images } = product
+
+  const productImages = images.map(i => i.url)
 
   return (
     <div className='mt-5 mb-20 grid md:grid-cols-3'>
       {/* slideshow */}
       <div className='md:col-span-2'>
-        <SlideShow className='!h-[500px] md:!h-[600px]' images={images} />
+        <SlideShow className='!h-[500px] md:!h-[600px]' images={productImages} />
       </div>
 
       {/* detalles */}

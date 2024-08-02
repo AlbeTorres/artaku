@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma'
 
-export const getProductbySlug = async (slug: string) => {
+export const getProductbyId = async (id: string) => {
   try {
     const product = await prisma.product.findFirst({
       include: {
@@ -18,7 +18,7 @@ export const getProductbySlug = async (slug: string) => {
         },
       },
       where: {
-        slug: slug,
+        id: id,
       },
     })
 
@@ -31,6 +31,6 @@ export const getProductbySlug = async (slug: string) => {
       product,
     }
   } catch (error) {
-    throw new Error('No se pudo encontrar producto por slug')
+    throw new Error('No se pudo encontrar producto con ese id')
   }
 }
