@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { getOrderbyId } from '@/actions'
 import { PaypalButton, Title } from '@/components'
 import clsx from 'clsx'

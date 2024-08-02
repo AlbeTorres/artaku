@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://*.vercel.com'),
   title: {
     template: '%s - Artaku',
     default: 'Home - Artaku',

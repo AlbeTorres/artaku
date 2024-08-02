@@ -4,9 +4,8 @@ import { auth } from '@/auth.config'
 import prisma from '@/lib/prisma'
 
 export const getOrdersByUser = async () => {
+  const session = await auth()
   try {
-    const session = await auth()
-
     if (!session?.user) {
       return {
         ok: false,
